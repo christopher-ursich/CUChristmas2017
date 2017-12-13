@@ -21,7 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import com.google.gdata.client.*;
 import com.google.gdata.client.photos.*;
+import com.google.gdata.data.*;
+import com.google.gdata.data.media.*;
+import com.google.gdata.data.photos.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -110,7 +114,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("no_tag", "signInResult:failed code=" + e.getStatusCode());
         }
-        PicasawebService myService = new PicasawebService("Ursichfamily-CUChristmas2017-1");
+        PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
+        try {
+            picasaSvc.setUserCredentials("xxxxxxxx", "xxxxxxxx");
+            Log.i("no_tag","authentication successful!? Wow!");
+        } catch (Exception e) {
+            Log.i("no_tag", "I don't know what to do.");
+        }
     }
 
     @Override
