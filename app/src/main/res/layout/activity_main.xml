@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context="org.ursichfamily.apps.cuchristmas2017.MainActivity">
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/words"
         android:layout_width="wrap_content"

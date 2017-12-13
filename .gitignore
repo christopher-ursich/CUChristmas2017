@@ -9,6 +9,7 @@
 .externalNativeBuild
 /keystore.properties
 /*/release/
+/app/google-services.json
 
 # Created by https://www.gitignore.io/api/androidstudio
 # User-specific configurations
