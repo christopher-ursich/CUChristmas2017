@@ -26,6 +26,7 @@ import com.google.gdata.client.photos.*;
 import com.google.gdata.data.*;
 import com.google.gdata.data.media.*;
 import com.google.gdata.data.photos.*;
+import com.google.gdata.util.AuthenticationException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,13 +51,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AccountManager am = AccountManager.get(this);
         //Account[] accounts = am.getAccountsByType("com.google");
         Account[] accounts = am.getAccounts();
-        String s = "num accounts: " + accounts.length;
+
+        StringBuilder s = new StringBuilder("");
+        s.append("num accounts: ").append(accounts.length);
+        Account ai;
         for (int i = 0; i < accounts.length; i++) {
-            s += "\n" + i
-                    + " type:" + accounts[i].type
-                    + " creator: " + accounts[i].CREATOR
-                    + " name:" + accounts[i].name
-            ;
+            ai = accounts[i];
+            s.append("\n").append(i);
+            s.append(" type:").append(ai.type);
+            s.append(" creator: ").append(ai.CREATOR);
+            s.append(" name:").append(ai.name);
         }
         //String s = "granted. num of accts = " + accounts.length + "\naccounts[0].name = " + accounts[0].name;
         tv.setText(s);
@@ -117,9 +121,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
         try {
             picasaSvc.setUserCredentials("xxxxxxxx", "xxxxxxxx");
-            Log.i("no_tag","authentication successful!? Wow!");
+            Log.i("no_tag", "authentication successful!? Wow!");
+        } catch (AuthenticationException e) {
+            Log.i("no_tag", "AuthenticationException: I don't know what to do.");
+            Log.i("no_tag", "scheme: " + e.getScheme());
+            Log.i("no_tag", "realm: " + e.getRealm());
+            Log.i("no_tag", "params: " + e.getParameters());
+            Log.i("no_tag", "authHeader: " + e.getAuthHeader());
+        } catch (RuntimeException e) {
+            Log.i("no_tag", "RuntimeException: I don't know what to do.");
+            Log.i("no_tag", "getName: " + e.getClass().getName());
         } catch (Exception e) {
-            Log.i("no_tag", "I don't know what to do.");
+            Log.i("no_tag", "Generic Exception: I don't know what to do.");
+            Log.i("no_tag", "getCause: " + e.getCause());
+            Log.i("no_tag", "getMessage: " + e.getMessage());
         }
     }
 
