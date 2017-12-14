@@ -33,6 +33,10 @@ android {
     }
     productFlavors {
     }
+
+    dexOptions {
+        jumboMode true
+    }
 }
 
 dependencies {
@@ -45,7 +49,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation('com.google.gdata:core:1.47.1') {
         exclude group: 'commons-logging'
-        exclude group: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'xpp3'
     }
 }
