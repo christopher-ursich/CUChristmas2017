@@ -30,8 +30,9 @@ import com.google.gdata.util.AuthenticationException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final int PERM_REQUEST_ID_GET_ACCOUNTS = 0;
-    private final int RC_SIGN_IN = 1;
+    final int PERM_REQUEST_ID_GET_ACCOUNTS = 0;
+    final int RC_SIGN_IN = 1;
+    TextView words;
     GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -40,30 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-
-        int permCheck_getAccounts = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS);
-        if (permCheck_getAccounts != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.GET_ACCOUNTS}, PERM_REQUEST_ID_GET_ACCOUNTS);
-        }
-
-        TextView tv = findViewById(R.id.words);
-        // Taken from https://developer.android.com/training/id-auth/identify.html
-        AccountManager am = AccountManager.get(this);
-        //Account[] accounts = am.getAccountsByType("com.google");
-        Account[] accounts = am.getAccounts();
-
-        StringBuilder s = new StringBuilder("");
-        s.append("num accounts: ").append(accounts.length);
-        Account ai;
-        for (int i = 0; i < accounts.length; i++) {
-            ai = accounts[i];
-            s.append("\n").append(i);
-            s.append(" type:").append(ai.type);
-            s.append(" creator: ").append(ai.CREATOR);
-            s.append(" name:").append(ai.name);
-        }
-        //String s = "granted. num of accts = " + accounts.length + "\naccounts[0].name = " + accounts[0].name;
-        tv.setText(s);
+        words = findViewById(R.id.words);
 
         // Configure sign-in to request the user's ID and basic profile (included in DEFAULT_SIGN_IN).
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
@@ -89,8 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
+            // The Task returned from this call is always completed, no need to attach a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -135,26 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("no_tag", "Generic Exception: I don't know what to do.");
             Log.i("no_tag", "getCause: " + e.getCause());
             Log.i("no_tag", "getMessage: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERM_REQUEST_ID_GET_ACCOUNTS: {
-                if (grantResults.length > 0) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                        // Taken from https://developer.android.com/training/id-auth/identify.html
-                        AccountManager am = AccountManager.get(this);
-                        //Account[] accounts = am.getAccountsByType("com.google");
-                        Account[] accounts = am.getAccounts();
-                        String s = "granted. num of accts = " + accounts.length;
-                        TextView tv = findViewById(R.id.words);
-                        tv.setText(s);
-                    }
-                }
-            }
         }
     }
 }
