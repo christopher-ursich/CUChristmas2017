@@ -10,6 +10,7 @@
 /keystore.properties
 /*/release/
 /app/google-services.json
+/gitignoreme
 
 # Created by https://www.gitignore.io/api/androidstudio
 # User-specific configurations
