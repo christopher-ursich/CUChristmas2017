@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,11 @@ import com.google.gdata.data.media.*;
 import com.google.gdata.data.photos.*;
 import com.google.gdata.util.AuthenticationException;
 
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    final int PERM_REQUEST_ID_GET_ACCOUNTS = 0;
-    final int RC_SIGN_IN = 1;
+    final int RC_SIGN_IN = 0;
     TextView words;
     GoogleSignInClient mGoogleSignInClient;
 
@@ -96,22 +98,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.w("no_tag", "signInResult:failed code=" + e.getStatusCode());
         }
         PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
-        try {
-            picasaSvc.setUserCredentials("xxxxxxxx", "xxxxxxxx");
-            Log.i("no_tag", "authentication successful!? Wow!");
-        } catch (AuthenticationException e) {
-            Log.i("no_tag", "AuthenticationException: I don't know what to do.");
-            Log.i("no_tag", "scheme: " + e.getScheme());
-            Log.i("no_tag", "realm: " + e.getRealm());
-            Log.i("no_tag", "params: " + e.getParameters());
-            Log.i("no_tag", "authHeader: " + e.getAuthHeader());
-        } catch (RuntimeException e) {
-            Log.i("no_tag", "RuntimeException: I don't know what to do.");
-            Log.i("no_tag", "getName: " + e.getClass().getName());
-        } catch (Exception e) {
-            Log.i("no_tag", "Generic Exception: I don't know what to do.");
-            Log.i("no_tag", "getCause: " + e.getCause());
-            Log.i("no_tag", "getMessage: " + e.getMessage());
+        new PicasaTalker().execute(picasaSvc);
+
+    }
+
+    private class PicasaTalker extends AsyncTask<PicasawebService, Void, Void> {
+        // Input parameters are of type xxxxx
+        // We will not indicate progress, so we can specify progress units of type Void.
+        // The result of the computation is of type xxxxxx
+        protected Void doInBackground(PicasawebService... pws) {
+            PicasawebService pws0 = pws[0];
+            try {
+                pws0.setUserCredentials("XXXXXX", "XXXXXX");
+                Log.i("no_tag", "authentication successful!? Wow!");
+            } catch (AuthenticationException e) {
+                Log.i("no_tag", "AuthenticationException: I don't know what to do.");
+                Log.i("no_tag", "scheme: " + e.getScheme());
+                Log.i("no_tag", "realm: " + e.getRealm());
+                Log.i("no_tag", "params: " + e.getParameters());
+                Log.i("no_tag", "authHeader: " + e.getAuthHeader());
+            } catch (RuntimeException e) {
+                Log.i("no_tag", "RuntimeException: I don't know what to do.");
+                Log.i("no_tag", "getName: " + e.getClass().getName());
+                e.printStackTrace();
+            } catch (Exception e) {
+                Log.i("no_tag", "Generic Exception: I don't know what to do.");
+                Log.i("no_tag", "getCause: " + e.getCause());
+                Log.i("no_tag", "getMessage: " + e.getMessage());
+            }
+            return null;
         }
     }
 }
