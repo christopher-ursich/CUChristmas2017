@@ -80,18 +80,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
-            Log.i("no_tag", "sign-in successful");
-            TextView tv = findViewById(R.id.words);
-            String s = "";
-            s += "DisplayName: " + account.getDisplayName();
-            s += "\nEmail: " + account.getEmail();
-            s += "\nFamilyName: " + account.getFamilyName();
-            s += "\nGivenName: " + account.getGivenName();
-            s += "\nId: " + account.getId();
-            s += "\nPhotoUrl: " + account.getPhotoUrl();
-            tv.setText(s);
-            Log.i("no_tag", s);
+//            // Signed in successfully, show authenticated UI.
+//            Log.i("no_tag", "sign-in successful");
+//            TextView tv = findViewById(R.id.words);
+//            String s = "";
+//            s += "DisplayName: " + account.getDisplayName();
+//            s += "\nEmail: " + account.getEmail();
+//            s += "\nFamilyName: " + account.getFamilyName();
+//            s += "\nGivenName: " + account.getGivenName();
+//            s += "\nId: " + account.getId();
+//            s += "\nPhotoUrl: " + account.getPhotoUrl();
+//            tv.setText(s);
+//            Log.i("no_tag", s);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
