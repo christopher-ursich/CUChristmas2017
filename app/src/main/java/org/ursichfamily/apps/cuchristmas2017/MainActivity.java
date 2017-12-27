@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Configure sign-in to request the user's ID and basic profile (included in DEFAULT_SIGN_IN).
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+
+        for (com.google.android.gms.common.api.Scope scope: gso.getScopeArray()
+             ) {
+            Log.i("no_tag", scope.toString());
+        }
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
@@ -99,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
         new PicasaTalker().execute(picasaSvc);
+
 
     }
 
