@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 
 import com.google.gdata.client.*;
@@ -36,6 +37,7 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     final int RC_SIGN_IN = 0;
+    final String PICASA_OPENID_SCOPE = "https://picasaweb.google.com/data/";
     TextView words;
     GoogleSignInClient mGoogleSignInClient;
 
@@ -47,13 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         words = findViewById(R.id.words);
 
-        // Configure sign-in to request the user's ID and basic profile (included in DEFAULT_SIGN_IN).
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
-
-        for (com.google.android.gms.common.api.Scope scope: gso.getScopeArray()
-             ) {
-            Log.i("no_tag", scope.toString());
-        }
+        Scope picasaScope = new Scope(PICASA_OPENID_SCOPE);
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(picasaScope)
+                .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private class PicasaTalker extends AsyncTask<PicasawebService, Void, Void> {
+    private static class PicasaTalker extends AsyncTask<PicasawebService, Void, Void> {
         // Input parameters are of type xxxxx
         // We will not indicate progress, so we can specify progress units of type Void.
         // The result of the computation is of type xxxxxx

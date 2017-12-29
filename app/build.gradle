@@ -21,7 +21,6 @@ android {
         targetSdkVersion 23
         versionCode 3
         versionName '0.2.1'
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.ogSigningConfig
         multiDexEnabled true
     }
@@ -59,6 +58,8 @@ dependencies {
         exclude group: 'commons-logging'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'xpp3'
+        // per https://stackoverflow.com/questions/31781702/gradle-build-fails-with-duplicates-when-adding-google-api-client
+        exclude group: 'com.google.guava', module: 'guava'
     }
     implementation 'com.android.support:multidex:1.0.2'
 }
