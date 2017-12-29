@@ -36,6 +36,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "MainActivity";
     final int RC_SIGN_IN = 0;
     final String PICASA_OPENID_SCOPE = "https://picasaweb.google.com/data/";
     TextView words;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
 //            // Signed in successfully, show authenticated UI.
-//            Log.i("no_tag", "sign-in successful");
+//            Log.i(TAG, "sign-in successful");
 //            TextView tv = findViewById(R.id.words);
 //            String s = "";
 //            s += "DisplayName: " + account.getDisplayName();
@@ -98,11 +99,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            s += "\nId: " + account.getId();
 //            s += "\nPhotoUrl: " + account.getPhotoUrl();
 //            tv.setText(s);
-//            Log.i("no_tag", s);
+//            Log.i(TAG, s);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("no_tag", "signInResult:failed code=" + e.getStatusCode());
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
         PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
         new PicasaTalker().execute(picasaSvc);
@@ -111,28 +112,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private static class PicasaTalker extends AsyncTask<PicasawebService, Void, Void> {
-        // Input parameters are of type xxxxx
         // We will not indicate progress, so we can specify progress units of type Void.
         // The result of the computation is of type xxxxxx
         protected Void doInBackground(PicasawebService... pws) {
+            Log.i(TAG,"doing In Background....");
             PicasawebService pws0 = pws[0];
             try {
-                pws0.setUserCredentials("XXXXXX", "XXXXXX");
-                Log.i("no_tag", "authentication successful!? Wow!");
+                URL albumFeedURL = new URL("https://picasaweb.google.com/data/feed/api/user/USERNAME?kind=album");
+                UserFeed myUserFeed = pws0.getFeed(albumFeedURL, UserFeed.class);
+                Log.i(TAG, "myUserFeed.getTitle: " + myUserFeed.getTitle());
+                //pws0.setUserCredentials("XXXXXXX", "XXXXXXX");
+                for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
+                    Log.i(TAG, myAlbum.getTitle().getPlainText());
+                }
+                Log.i(TAG, "try'ed without exception....");
             } catch (AuthenticationException e) {
-                Log.i("no_tag", "AuthenticationException: I don't know what to do.");
-                Log.i("no_tag", "scheme: " + e.getScheme());
-                Log.i("no_tag", "realm: " + e.getRealm());
-                Log.i("no_tag", "params: " + e.getParameters());
-                Log.i("no_tag", "authHeader: " + e.getAuthHeader());
+                Log.i(TAG, "AuthenticationException: I don't know what to do.");
+                Log.i(TAG, "scheme: " + e.getScheme());
+                Log.i(TAG, "realm: " + e.getRealm());
+                Log.i(TAG, "params: " + e.getParameters());
+                Log.i(TAG, "authHeader: " + e.getAuthHeader());
             } catch (RuntimeException e) {
-                Log.i("no_tag", "RuntimeException: I don't know what to do.");
-                Log.i("no_tag", "getName: " + e.getClass().getName());
+                Log.i(TAG, "RuntimeException: I don't know what to do.");
+                Log.i(TAG, "getName: " + e.getClass().getName());
                 e.printStackTrace();
             } catch (Exception e) {
-                Log.i("no_tag", "Generic Exception: I don't know what to do.");
-                Log.i("no_tag", "getCause: " + e.getCause());
-                Log.i("no_tag", "getMessage: " + e.getMessage());
+                Log.i(TAG, "Generic Exception: I don't know what to do.");
+                Log.i(TAG, "getCause: " + e.getCause());
+                Log.i(TAG, "getMessage: " + e.getMessage());
             }
             return null;
         }
