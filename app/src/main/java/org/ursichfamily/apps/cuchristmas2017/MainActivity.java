@@ -33,6 +33,7 @@ import com.google.gdata.data.photos.*;
 import com.google.gdata.util.AuthenticationException;
 
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -115,15 +116,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // We will not indicate progress, so we can specify progress units of type Void.
         // The result of the computation is of type xxxxxx
         protected Void doInBackground(PicasawebService... pws) {
-            Log.i(TAG,"doing In Background....");
+            Log.i(TAG, "doing In Background....");
             PicasawebService pws0 = pws[0];
             try {
-                URL albumFeedURL = new URL("https://picasaweb.google.com/data/feed/api/user/USERNAME?kind=album");
-                UserFeed myUserFeed = pws0.getFeed(albumFeedURL, UserFeed.class);
-                Log.i(TAG, "myUserFeed.getTitle: " + myUserFeed.getTitle());
-                //pws0.setUserCredentials("XXXXXXX", "XXXXXXX");
-                for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
-                    Log.i(TAG, myAlbum.getTitle().getPlainText());
+                Log.i(TAG, "service version: " + pws0.getServiceVersion());
+                Log.i(TAG, "content type: " + pws0.getContentType());
+
+                URL albumFeedURL = new URL("https://picasaweb.google.com/data/feed/api/user/my@emailad.dy");
+
+                UserFeed userFeed = pws0.getFeed(albumFeedURL,UserFeed.class);
+                Log.i(TAG, "userFeed nickname: " + userFeed.getNickname());
+                AlbumFeed albumFeed = pws0.getFeed(albumFeedURL, AlbumFeed.class);
+                Log.i(TAG, "albumfeed.getName: " + albumFeed.getName());       // null
+                Log.i(TAG, "albumfeed.getAccess: " + albumFeed.getAccess());   // null
+                List<GphotoEntry> listOfAlbums = albumFeed.getEntries();
+                Log.i(TAG, "num albums: " + listOfAlbums.size());
+
+                //pws0.setUserCredentials("XXXXXX", "XXXXXX");
+                for (GphotoEntry gpe : listOfAlbums) {
+                    Log.i(TAG, "title PlainText: " + gpe.getTitle().getPlainText());
+                    //Log.i(TAG, "summary PlainText: " + gpe.getSummary().getPlainText());
+                    Log.i(TAG, "canEdit: " + gpe.getCanEdit());   // hmm all are true
+                    //Log.i(TAG, "kind: " + gpe.getKind());                                // all null
+                    //Log.i(TAG, "id: " + gpe.getId());                                    // like https://picasaweb.google.com/data/entry/user/1nnnnn9/albumid/56nnnnnn61
+                    //Log.i(TAG, "GphotoId: " + gpe.getGphotoId());                     // like 56nnnnnnnn61
                 }
                 Log.i(TAG, "try'ed without exception....");
             } catch (AuthenticationException e) {
