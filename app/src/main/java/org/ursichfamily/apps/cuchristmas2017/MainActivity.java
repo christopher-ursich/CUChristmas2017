@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,11 +33,15 @@ import com.google.gdata.data.media.*;
 import com.google.gdata.data.photos.*;
 import com.google.gdata.util.AuthenticationException;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TechAdventuresURL = "https://photos.app.goo.gl/I6YM6vnuJ3F9o6Iy2";
+    private static final String album_for_User1 = "https://photos.app.goo.gl/CFwMi5k7vHKyNvZB2";
     private static final String TAG = "MainActivity";
     final int RC_SIGN_IN = 0;
     final String PICASA_OPENID_SCOPE = "https://picasaweb.google.com/data/";
@@ -46,15 +51,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //openAlbumInBrowser(album_for_User1);
         setContentView(R.layout.activity_main);
-
+//
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        words = findViewById(R.id.words);
-
+//        findViewById(R.id.openTechAdvButton).setOnClickListener(this);
+//        findViewById(R.id.openEscapologyButton).setOnClickListener(this);
+//
+//        words = findViewById(R.id.words);
+//
         Scope picasaScope = new Scope(PICASA_OPENID_SCOPE);
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(picasaScope)
+//                .requestScopes(picasaScope)
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
@@ -64,12 +73,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.sign_in_button:
                 signIn();
+                break;
+            case R.id.openTechAdvButton:
+                openAlbumInBrowser(TechAdventuresURL);
+                break;
+            case R.id.openEscapologyButton:
+                openAlbumInBrowser(null);
+                break;
         }
     }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void openAlbumInBrowser(String albumURL) {
+        Uri webpage = Uri.parse(albumURL);
+        Intent openInBrowserIntent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (openInBrowserIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(openInBrowserIntent);
+        }
     }
 
     @Override
@@ -89,26 +113,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-//            // Signed in successfully, show authenticated UI.
+            // Signed in successfully, show authenticated UI.
 //            Log.i(TAG, "sign-in successful");
-//            TextView tv = findViewById(R.id.words);
-//            String s = "";
+            TextView tv = findViewById(R.id.words);
+            String s = "";
 //            s += "DisplayName: " + account.getDisplayName();
 //            s += "\nEmail: " + account.getEmail();
 //            s += "\nFamilyName: " + account.getFamilyName();
 //            s += "\nGivenName: " + account.getGivenName();
-//            s += "\nId: " + account.getId();
+            s += "\nId: " + account.getId();
 //            s += "\nPhotoUrl: " + account.getPhotoUrl();
-//            tv.setText(s);
-//            Log.i(TAG, s);
+            tv.setText(s);
+            Log.i(TAG, s);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
-        PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
-        new PicasaTalker().execute(picasaSvc);
-
+        //PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
+        //new PicasaTalker().execute(picasaSvc);
+        openAlbumInBrowser(album_for_User1);
 
     }
 
@@ -122,16 +146,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(TAG, "service version: " + pws0.getServiceVersion());
                 Log.i(TAG, "content type: " + pws0.getContentType());
 
-                URL albumFeedURL = new URL("https://picasaweb.google.com/data/feed/api/user/my@emailad.dy");
+                String mainWebAddy = "https://picasaweb.google.com/data/feed/api/user/my@emailad.dy";
+                URL mainURL = new URL(mainWebAddy);
 
-                UserFeed userFeed = pws0.getFeed(albumFeedURL,UserFeed.class);
+                UserFeed userFeed = pws0.getFeed(mainURL, UserFeed.class);
                 Log.i(TAG, "userFeed nickname: " + userFeed.getNickname());
-                AlbumFeed albumFeed = pws0.getFeed(albumFeedURL, AlbumFeed.class);
+                AlbumFeed albumFeed = pws0.getFeed(mainURL, AlbumFeed.class);
                 Log.i(TAG, "albumfeed.getName: " + albumFeed.getName());       // null
                 Log.i(TAG, "albumfeed.getAccess: " + albumFeed.getAccess());   // null
                 List<GphotoEntry> listOfAlbums = albumFeed.getEntries();
                 Log.i(TAG, "num albums: " + listOfAlbums.size());
 
+                String albumAddy = null;
                 //pws0.setUserCredentials("XXXXXX", "XXXXXX");
                 for (GphotoEntry gpe : listOfAlbums) {
                     Log.i(TAG, "title PlainText: " + gpe.getTitle().getPlainText());
@@ -139,8 +165,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.i(TAG, "canEdit: " + gpe.getCanEdit());   // hmm all are true
                     //Log.i(TAG, "kind: " + gpe.getKind());                                // all null
                     //Log.i(TAG, "id: " + gpe.getId());                                    // like https://picasaweb.google.com/data/entry/user/1nnnnn9/albumid/56nnnnnn61
+                    albumAddy = gpe.getId();
                     //Log.i(TAG, "GphotoId: " + gpe.getGphotoId());                     // like 56nnnnnnnn61
+                    //albumURI = URI.create(gpe.getGphotoId());
+                    break;
                 }
+                URL albumFeed2 = new URL(albumAddy);
+                List<GphotoAlbumId> listOfAlbums2;
+                URL techadventuresURL = new URL("https://photos.app.goo.gl/I6YM6vnuJ3F9o6Iy2");
+
                 Log.i(TAG, "try'ed without exception....");
             } catch (AuthenticationException e) {
                 Log.i(TAG, "AuthenticationException: I don't know what to do.");
