@@ -5,6 +5,9 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+File albumMapJSONfile = new File("album_map.json")
+String albumMapJSON = "\"" + albumMapJSONfile.text +"\""
+
 android {
     signingConfigs {
         ogSigningConfig {
@@ -26,6 +29,7 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField("String","albumMapJSONtext", albumMapJSON)
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.ogSigningConfig

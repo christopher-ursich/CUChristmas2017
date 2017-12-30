@@ -33,6 +33,8 @@ import com.google.gdata.data.media.*;
 import com.google.gdata.data.photos.*;
 import com.google.gdata.util.AuthenticationException;
 
+import org.json.JSONObject;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -40,6 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String albumMapJSONtext = BuildConfig.albumMapJSONtext;
     private static final String TechAdventuresURL = "https://photos.app.goo.gl/I6YM6vnuJ3F9o6Iy2";
     private static final String album_for_User1 = "https://photos.app.goo.gl/CFwMi5k7vHKyNvZB2";
     private static final String TAG = "MainActivity";
@@ -111,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // The GoogleSignInAccount object contains information about the signed-in user, such as the user's name.
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
+            // Load album map
+            JSONObject reader = new JSONObject(albumMapJSONtext);
+
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
@@ -129,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         //PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
         //new PicasaTalker().execute(picasaSvc);
