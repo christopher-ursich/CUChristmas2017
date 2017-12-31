@@ -83,42 +83,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String googleEmail = account.getEmail();
-            Log.i(TAG, "googleEmail: " + googleEmail);
-
-//            String googleEmailHash = sha256hash(googleEmail);
-//            Log.i(TAG, "googleEmailHash: " + googleEmailHash);
             String googleEmailHashN = sha256hash(googleEmail + "\n");
-            Log.i(TAG, "googleEmailHashN: " + googleEmailHashN);
 
             // Load album map
-            JSONArray reader = new JSONArray(albumMapJSONtext);
+            JSONArray albumMap = new JSONArray(albumMapJSONtext);
 
             String albumURL = "";
-            for (int i = 0; i < reader.length(); i++) {
-                //Log.i(TAG, "working on id:" + reader.getJSONObject(i).getString("id"));
-                if (reader.getJSONObject(i).getString("id").equals(googleEmailHashN)) {
-                    albumURL = reader.getJSONObject(i).getString("albumURL");
-                    Log.i(TAG, "Found!: " + reader.getJSONObject(i).getString("id") + "has albumURL: " + albumURL);
+            for (int i = 0; i < albumMap.length(); i++) {
+                if (albumMap.getJSONObject(i).getString("id").equals(googleEmailHashN)) {
+                    albumURL = albumMap.getJSONObject(i).getString("albumURL");
+                    Log.i(TAG, "Found!: " + albumMap.getJSONObject(i).getString("id") + "has albumURL: " + albumURL);
                     break;  // early exit once we've found the match
                 }
             }
-
             if (!albumURL.equals("")) {
                 openAlbumInBrowser(albumURL);
             }
-
-            // Signed in successfully, show authenticated UI.
-//            Log.i(TAG, "sign-in successful");
-            TextView tv = findViewById(R.id.words);
-            String s = "account info: ";
-//            s += "DisplayName: " + account.getDisplayName();
-            s += "\nEmail: " + account.getEmail();
-//            s += "\nFamilyName: " + account.getFamilyName();
-//            s += "\nGivenName: " + account.getGivenName();
-//            s += "\nId: " + account.getId();
-//            s += "\nPhotoUrl: " + account.getPhotoUrl();
-            tv.setText(s);
-            Log.i(TAG, s);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
