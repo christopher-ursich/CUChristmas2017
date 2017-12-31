@@ -6,7 +6,10 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 File albumMapJSONfile = new File("album_map.json")
-String albumMapJSON = "\"" + albumMapJSONfile.text +"\""
+String albumMapJSONcleanText = albumMapJSONfile.text
+        .replaceAll("\\s", "")              // eliminate whitespace
+        .replaceAll("\"", "\\\\\"")         // backslash-escape double-quotes
+String albumMapJSONcleanString = "\"" + albumMapJSONcleanText + "\""
 
 android {
     signingConfigs {
@@ -29,7 +32,7 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField("String","albumMapJSONtext", albumMapJSON)
+            buildConfigField("String", "albumMapJSON", albumMapJSONcleanString)
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.ogSigningConfig

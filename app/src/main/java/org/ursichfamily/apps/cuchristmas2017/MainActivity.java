@@ -42,7 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String albumMapJSONtext = BuildConfig.albumMapJSONtext;
+    private static final String albumMapJSONtext = BuildConfig.albumMapJSON;
     private static final String TechAdventuresURL = "https://photos.app.goo.gl/I6YM6vnuJ3F9o6Iy2";
     private static final String album_for_User1 = "https://photos.app.goo.gl/CFwMi5k7vHKyNvZB2";
     private static final String TAG = "MainActivity";
