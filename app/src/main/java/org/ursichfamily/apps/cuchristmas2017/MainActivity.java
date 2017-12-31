@@ -18,7 +18,6 @@ import com.google.common.base.Charsets;
 
 import org.json.JSONArray;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        words = findViewById(R.id.words);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions
@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;  // early exit once we've found the match
                 }
             }
-            if (!albumURL.equals("")) {
+            if (albumURL.equals("")) {
+                words.setText("Sorry, but I don't find a photo album for \"" + googleEmail + "\".");
+            } else {
                 openAlbumInBrowser(albumURL);
             }
         } catch (ApiException e) {
