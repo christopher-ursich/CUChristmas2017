@@ -1,15 +1,8 @@
 package org.ursichfamily.apps.cuchristmas2017;
 
-import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,25 +13,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 
-import com.google.gdata.client.*;
+import com.google.common.base.Charsets;
 import com.google.gdata.client.photos.*;
-import com.google.gdata.data.*;
-import com.google.gdata.data.media.*;
 import com.google.gdata.data.photos.*;
 import com.google.gdata.util.AuthenticationException;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URI;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -105,14 +94,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String googleEmail = account.getEmail();
+            Log.i(TAG, "googleEmail: " + googleEmail);
+
+//            String googleEmailHash = sha256hash(googleEmail);
+//            Log.i(TAG, "googleEmailHash: " + googleEmailHash);
+            String googleEmailHashN = sha256hash(googleEmail + "\n");
+            Log.i(TAG, "googleEmailHashN: " + googleEmailHashN);
 
             // Load album map
             JSONArray reader = new JSONArray(albumMapJSONtext);
 
             String albumURL = "";
             for (int i = 0; i < reader.length(); i++) {
-                if (reader.getJSONObject(i).getString("id") == googleEmail) {
-                    Log.i(TAG, "Found!: " + reader.getJSONObject(i).getString("id"));
+                //Log.i(TAG, "working on id:" + reader.getJSONObject(i).getString("id"));
+                if (reader.getJSONObject(i).getString("id").equals(googleEmailHashN)) {
+                    albumURL = reader.getJSONObject(i).getString("albumURL");
+                    Log.i(TAG, "Found!: " + reader.getJSONObject(i).getString("id") + "has albumURL: " + albumURL);
                     break;  // early exit once we've found the match
                 }
             }
@@ -140,6 +137,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //new PicasaTalker().execute(picasaSvc);
         //openAlbumInBrowser(album_for_User1);
 
+    }
+    private static String sha256hash(String s) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(s.getBytes(Charsets.US_ASCII));
+            return hexStringOfByteArray(hashedBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String hexStringOfByteArray(byte[] byteArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < byteArray.length; i++) {
+            stringBuilder.append(Integer.toString((byteArray[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return stringBuilder.toString();
     }
 
     private static class PicasaTalker extends AsyncTask<PicasawebService, Void, Void> {
