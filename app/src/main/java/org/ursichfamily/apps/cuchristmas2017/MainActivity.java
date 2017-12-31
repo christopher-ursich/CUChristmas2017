@@ -44,8 +44,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String albumMapJSONtext = BuildConfig.albumMapJSON;
-    private static final String TechAdventuresURL = "https://photos.app.goo.gl/I6YM6vnuJ3F9o6Iy2";
-    private static final String album_for_User1 = "https://photos.app.goo.gl/CFwMi5k7vHKyNvZB2";
     private static final String TAG = "MainActivity";
     final int RC_SIGN_IN = 0;
     final String PICASA_OPENID_SCOPE = "https://picasaweb.google.com/data/";
@@ -55,15 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //openAlbumInBrowser(album_for_User1);
         setContentView(R.layout.activity_main);
-//
+
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-//        findViewById(R.id.openTechAdvButton).setOnClickListener(this);
-//        findViewById(R.id.openEscapologyButton).setOnClickListener(this);
-//
-//        words = findViewById(R.id.words);
-//
+
         Scope picasaScope = new Scope(PICASA_OPENID_SCOPE);
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -78,12 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.sign_in_button:
                 signIn();
-                break;
-            case R.id.openTechAdvButton:
-                openAlbumInBrowser(TechAdventuresURL);
-                break;
-            case R.id.openEscapologyButton:
-                openAlbumInBrowser(null);
                 break;
         }
     }

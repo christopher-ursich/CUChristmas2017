@@ -12,18 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/openTechAdvButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="open Tech Adventures" />
-
-    <Button
-        android:id="@+id/openEscapologyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="open Escapology" />
-
     <TextView
         android:id="@+id/words"
         android:layout_width="wrap_content"
