@@ -33,6 +33,7 @@ import com.google.gdata.data.media.*;
 import com.google.gdata.data.photos.*;
 import com.google.gdata.util.AuthenticationException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Scope picasaScope = new Scope(PICASA_OPENID_SCOPE);
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
 //                .requestScopes(picasaScope)
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -115,19 +117,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             // Load album map
-            JSONObject reader = new JSONObject(albumMapJSONtext);
+            JSONArray reader = new JSONArray(albumMapJSONtext);
+            for (int i = 0; i < reader.length(); i++) {
+                JSONObject j = reader.getJSONObject(i);
+                Log.i(TAG, reader.getJSONObject(i).getString("id"));
+            }
 
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
 //            Log.i(TAG, "sign-in successful");
             TextView tv = findViewById(R.id.words);
-            String s = "";
+            String s = "account info: ";
 //            s += "DisplayName: " + account.getDisplayName();
-//            s += "\nEmail: " + account.getEmail();
+            s += "\nEmail: " + account.getEmail();
 //            s += "\nFamilyName: " + account.getFamilyName();
 //            s += "\nGivenName: " + account.getGivenName();
-            s += "\nId: " + account.getId();
+//            s += "\nId: " + account.getId();
 //            s += "\nPhotoUrl: " + account.getPhotoUrl();
             tv.setText(s);
             Log.i(TAG, s);
