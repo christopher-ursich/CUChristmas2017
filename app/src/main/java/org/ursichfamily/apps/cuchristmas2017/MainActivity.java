@@ -108,15 +108,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private static String sha256hash(String s) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private static String sha256hash(String s) {
+        MessageDigest md;
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = md.digest(s.getBytes(Charsets.US_ASCII));
-            return hexStringOfByteArray(hashedBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            return "";
         }
+        byte[] hashedBytes = md.digest(s.getBytes(Charsets.US_ASCII));
+        return hexStringOfByteArray(hashedBytes);
     }
 
     private static String hexStringOfByteArray(byte[] byteArray) {
