@@ -116,14 +116,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // The GoogleSignInAccount object contains information about the signed-in user, such as the user's name.
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            String googleEmail = account.getEmail();
+
             // Load album map
             JSONArray reader = new JSONArray(albumMapJSONtext);
-            for (int i = 0; i < reader.length(); i++) {
-                JSONObject j = reader.getJSONObject(i);
-                Log.i(TAG, reader.getJSONObject(i).getString("id"));
-            }
 
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            String albumURL = "";
+            for (int i = 0; i < reader.length(); i++) {
+                if (reader.getJSONObject(i).getString("id") == googleEmail) {
+                    Log.i(TAG, "Found!: " + reader.getJSONObject(i).getString("id"));
+                    break;  // early exit once we've found the match
+                }
+            }
 
             // Signed in successfully, show authenticated UI.
 //            Log.i(TAG, "sign-in successful");
@@ -146,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         //PicasawebService picasaSvc = new PicasawebService("Ursichfamily-CUChristmas2017-1");
         //new PicasaTalker().execute(picasaSvc);
-        openAlbumInBrowser(album_for_User1);
+        //openAlbumInBrowser(album_for_User1);
 
     }
 
