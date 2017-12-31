@@ -114,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
+            if (! albumURL.equals("")){
+                openAlbumInBrowser(albumURL);
+            }
+
             // Signed in successfully, show authenticated UI.
 //            Log.i(TAG, "sign-in successful");
             TextView tv = findViewById(R.id.words);
