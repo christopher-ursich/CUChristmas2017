@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static String hexStringOfByteArray(byte[] byteArray) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < byteArray.length; i++) {
-            stringBuilder.append(Integer.toString((byteArray[i] & 0xff) + 0x100, 16).substring(1));
+        for (byte b: byteArray) {
+            stringBuilder.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
         }
         return stringBuilder.toString();
     }
