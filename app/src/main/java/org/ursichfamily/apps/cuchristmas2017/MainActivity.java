@@ -92,12 +92,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (int i = 0; i < albumMap.length(); i++) {
                 if (albumMap.getJSONObject(i).getString("id").equals(googleEmailHashN)) {
                     albumURL = albumMap.getJSONObject(i).getString("albumURL");
-                    Log.i(TAG, "Found!: " + albumMap.getJSONObject(i).getString("id") + "has albumURL: " + albumURL);
+                    //Log.i(TAG, "Found!: " + albumMap.getJSONObject(i).getString("id") + "has albumURL: " + albumURL);
                     break;  // early exit once we've found the match
                 }
             }
             if (albumURL.equals("")) {
-                words.setText("Sorry, but I don't find a photo album for \"" + googleEmail + "\".");
+                words.setText(getString(R.string.sorry_no_album, googleEmail));
             } else {
                 openAlbumInBrowser(albumURL);
             }

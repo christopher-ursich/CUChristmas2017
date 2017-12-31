@@ -1,5 +1,7 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_full_name">CU Christmas 2017</string>
     <string name="app_short_name">CU XMAS 2017</string>
     <string name="description">This app is my Christmas gift in 2017.</string>
+    <string name="welcome_msg">Sign in to Google to see your Christmas photo album!</string>
+    <string name="sorry_no_album">Sorry, but I don\'t find a photo album for \"<xliff:g id="Google_email_addy" example="wshakespeare@gmail.com">%s</xliff:g>\".</string>
 </resources>
