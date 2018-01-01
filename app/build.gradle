@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 
-// 2017-12-10 I have moved signing information to a separate file.
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -13,7 +12,7 @@ String albumMapJSONcleanString = "\"" + albumMapJSONcleanText + "\""
 
 android {
     signingConfigs {
-        ogSigningConfig {
+        cuSigningConfig {
             keyAlias keystoreProperties['keyAlias']
             storeFile file(keystoreProperties['storeFile'])
             keyPassword keystoreProperties['keyPassword']
@@ -25,24 +24,16 @@ android {
         applicationId "org.ursichfamily.apps.cuchristmas2017"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 3
-        versionName '0.2.1'
-        signingConfig signingConfigs.ogSigningConfig
-        multiDexEnabled true
+        versionCode 4
+        versionName '2.0.0'
     }
     buildTypes {
         release {
             buildConfigField("String", "albumMapJSON", albumMapJSONcleanString)
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.ogSigningConfig
+            signingConfig signingConfigs.cuSigningConfig
         }
-    }
-    productFlavors {
-    }
-
-    dexOptions {
-        jumboMode true
     }
     lintOptions {
         checkReleaseBuilds false
@@ -52,23 +43,12 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
-    // FROM https://developers.google.com/android/guides/http-auth
+
+    // From https://developers.google.com/android/guides/http-auth ...
     // Google Api Client library and Android extension
     implementation 'com.google.api-client:google-api-client:1.22.0'
     implementation 'com.google.api-client:google-api-client-android:1.22.0'
-//    testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation('com.google.gdata:core:1.47.1') {
-        exclude group: 'commons-logging'
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-        exclude group: 'xpp3'
-        // per https://stackoverflow.com/questions/31781702/gradle-build-fails-with-duplicates-when-adding-google-api-client
-        exclude group: 'com.google.guava', module: 'guava'
-    }
-    implementation 'com.android.support:multidex:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
