@@ -58,14 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void openAlbumInBrowser(String albumURL) {
-        Uri webpage = Uri.parse(albumURL);
-        Intent openInBrowserIntent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (openInBrowserIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(openInBrowserIntent);
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -110,6 +102,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void openAlbumInBrowser(String albumURL) {
+        Uri webpage = Uri.parse(albumURL);
+        Intent openInBrowserIntent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (openInBrowserIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(openInBrowserIntent);
+        }
+    }
+
     private static String sha256hash(String s) {
         MessageDigest md;
         try {
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static String hexStringOfByteArray(byte[] byteArray) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (byte b: byteArray) {
+        for (byte b : byteArray) {
             stringBuilder.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
         }
         return stringBuilder.toString();
