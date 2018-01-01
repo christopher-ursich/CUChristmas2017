@@ -4,4 +4,7 @@
     <string name="description">This app is my Christmas gift in 2017.</string>
     <string name="welcome_msg">Sign in to Google to see your Christmas photo album!</string>
     <string name="sorry_no_album">Sorry, but I don\'t find a photo album for \"<xliff:g id="Google_email_addy" example="wshakespeare@gmail.com">%s</xliff:g>\".</string>
+    <string name="about_msg">The Christmas presents I usually give are boring.  One of my projects required me to learn Android programming, so I wrote this app as part of that effort.  Contrary to some earlier mistaken interpretations, the purpose of this app is NOT to help you find my Christmas wish list on Amazon!  Merry Christmas &amp; Happy New Year.\n&#8212;Uncle Christopher</string>
+    <string name="menuItemTitle_see_sourcecode">See open source code</string>
+    <string name="menuItemTitle_about">About</string>
 </resources>

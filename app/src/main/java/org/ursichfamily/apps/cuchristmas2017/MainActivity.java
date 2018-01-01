@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String GITHUB_PAGE_OF_PROJECT = "https://github.com/christopher-ursich/CUChristmas2017";
     private static final String albumMapJSONtext = BuildConfig.albumMapJSON;
     private static final String TAG = "MainActivity";
     final int RC_SIGN_IN = 0;
@@ -42,6 +45,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu m) {
+        getMenuInflater().inflate(R.menu.main, m);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem mi) {
+        int itemThatWasChosen = mi.getItemId();
+        switch (itemThatWasChosen) {
+            case R.id.see_sourcecode:
+                openWebpage(GITHUB_PAGE_OF_PROJECT);
+                break;
+            case R.id.about:
+                words.setText(R.string.about_msg);
+                break;
+        }
+        return super.onOptionsItemSelected(mi);
     }
 
     @Override
@@ -91,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (albumURL.equals("")) {
                 words.setText(getString(R.string.sorry_no_album, googleEmail));
             } else {
-                openAlbumInBrowser(albumURL);
+                openWebpage(albumURL);
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -102,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void openAlbumInBrowser(String albumURL) {
-        Uri webpage = Uri.parse(albumURL);
+    private void openWebpage(String webpageURL) {
+        Uri webpage = Uri.parse(webpageURL);
         Intent openInBrowserIntent = new Intent(Intent.ACTION_VIEW, webpage);
         if (openInBrowserIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(openInBrowserIntent);
